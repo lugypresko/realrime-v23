@@ -1,0 +1,44 @@
+venv/ 
+__pycache__/
+*.pyc
+# Python venv
+venv/
+.env/
+*.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Model checkpoints / embeddings / temp
+*.npy
+*.pt
+*.bin
+*.ckpt
+*.onnx
+*.dll
+*.dylib
+.cache/
+.huggingface/
+
+# Audio/Video
+*.wav
+*.mp3
+*.flac
+*.ogg
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+

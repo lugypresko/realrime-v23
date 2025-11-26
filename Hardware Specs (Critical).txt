@@ -1,0 +1,112 @@
+Hardware Specs (Critical)
+
+Yes — you must confirm the target hardware before writing a single line of code.
+
+The MVP lives or dies based on whether this machine can do:
+
+Silence → 1.2s audio → Whisper tiny.en (CPU int8) → <1.5s output.
+
+I need to know:
+
+Required:
+
+CPU model (e.g., Intel i5-8250U, Ryzen 5 4500U)
+
+Number of cores
+
+Base/boost frequency
+
+RAM size
+
+OS (Windows 10/11?)
+
+Is background blur used during sales calls?
+
+Why this matters:
+
+If the CPU is:
+
+pre-2018
+
+2 cores
+
+or running at 1.0–1.6 GHz sustained under Zoom load
+
+Whisper tiny.en CPU may never hit <1.5 seconds — no matter what code we write.
+
+This is the biggest existential risk to the project.
+
+2. Environment Setup – Can We Install the Required Dependencies Now?
+
+Short answer: Yes — and we should.
+
+The MVP requires:
+
+pip install sounddevice numpy torch
+pip install faster-whisper sentence-transformers
+pip install pyqt6
+pip install keyboard
+
+
+Nothing here is dangerous or intrusive.
+All are standard Python scientific/audiovisual libraries.
+
+Important:
+
+sounddevice sometimes requires Microsoft Visual C++ runtime or WASAPI permissions.
+We’ll know immediately whether the environment is viable.
+
+Installing now gives early signal if the machine is capable.
+
+3. Execution Strategy – Critical Path vs. Physics Test (Which First?)
+
+You asked:
+
+The "Physics Test" and "Critical Path" have slightly different orderings.
+Should we follow the "Critical Path" (Day 1 = Whisper first)
+or the "Physics Test" (Phase 1 = Audio/VAD first)?
+
+Here is the definitive answer:
+
+**FOLLOW THE CRITICAL PATH.
+
+NOT the Physics Test order.**
+
+Why?
+
+A. Whisper First = Fastest Feasibility Check
+
+The #1 question is:
+Can Whisper tiny.en run <1.3s on this machine?
+
+This can be tested with a 1-second WAV file in 30 minutes — no audio code, no VAD, no ring buffer.
+
+If Whisper alone is too slow, the entire MVP is dead on arrival, and we need:
+
+smaller models
+
+GPU
+
+or a totally different architecture
+
+So testing Whisper first is the fastest kill path.
+
+B. Audio/VAD before Whisper is dangerous
+
+If you start with VAD + buffer extraction:
+
+You may spend 10 hours writing audio glue
+
+Only to discover Whisper is too slow to meet the 1.5s budget
+
+Meaning everything you built is wasted engineering time
+
+This is why the “Critical Path” (Day 1 → Whisper test) is correct.
+
+C. Physics Test uses VAD-first for realism, NOT feasibility
+
+Physics Test = “full pipeline test.”
+
+Critical Path = “check for feasibility as early as possible with minimal dependencies.”
+
+For feasibility, follow the Critical Path.

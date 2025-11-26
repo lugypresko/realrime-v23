@@ -1,0 +1,2 @@
+Latency: 0.571s
+Text: 

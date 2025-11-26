@@ -1,0 +1,7 @@
+openai-whisper
+sentence-transformers
+torch
+sounddevice
+numpy
+pyaudio
+faster-whisper
