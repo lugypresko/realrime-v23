@@ -1,0 +1,62 @@
+{
+  "opening": [
+    "Thanks for sharing that—what prompted you to look at this now?",
+    "Appreciate the context. What's the main outcome you're hoping for?",
+    "Got it. How were you handling this before today?",
+    "Before we dive deep, what would make this call a win for you?",
+    "Who else is feeling this challenge internally?",
+    "When did you first notice this issue showing up?",
+    "What happens if nothing changes over the next quarter?",
+    "What's the ripple effect of this on your day-to-day?",
+    "If we solved this, what would that free you up to do?",
+    "How are you measuring success right now?"
+  ],
+  "discovery": [
+    "Walk me through the last time this problem flared up.",
+    "What have you already tried to fix this?",
+    "Who else is involved when this breaks down?",
+    "What does success look like six months from now?",
+    "What’s the real cost of this issue continuing?",
+    "How does this impact your team’s goals this quarter?",
+    "What's the process today, step by step?",
+    "Where do delays usually creep in?",
+    "Who owns the decision if we change this?",
+    "What would make this the right time to act?"
+  ],
+  "pain": [
+    "What's the worst-case scenario if this slips again?",
+    "How does this hit your team’s morale?",
+    "What’s the hidden cost people don’t see?",
+    "How often does this derail your priorities?",
+    "Who gets the urgent call when this fails?",
+    "What’s the last straw that would make you switch?",
+    "How do you explain this issue to leadership?",
+    "What are you compromising on because of this?",
+    "How is this affecting your customers?",
+    "What happens if this keeps dragging on?"
+  ],
+  "objection": [
+    "Help me understand the concern behind that.",
+    "What would make the investment feel worthwhile?",
+    "How have past projects missed the mark for you?",
+    "What risk are you most worried about?",
+    "If budget wasn’t a blocker, what would you do?",
+    "Who else needs to feel confident about this?",
+    "What's the consequence of waiting another month?",
+    "What proof would remove the doubt for you?",
+    "What’s the trade-off of delaying this decision?",
+    "What would progress look like in the next two weeks?"
+  ],
+  "close": [
+    "Sounds like we’re aligned—want to outline next steps?",
+    "Should we lock in stakeholders for a working session?",
+    "Is there anyone else who needs to weigh in before we proceed?",
+    "Would a quick pilot help you feel confident moving forward?",
+    "What date makes sense for a go-live?",
+    "Can we agree on the success metrics before we kick off?",
+    "Do you want to start with a limited scope to move faster?",
+    "Who will own the rollout on your side?",
+    "Ready to recap decisions and timelines together?",
+    "If we start this week, when would you want the first milestone?"
+  ]
+}

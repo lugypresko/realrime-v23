@@ -1,13 +1,13 @@
-import collections
+import threading
 import time
 import uuid
-from typing import Deque, Optional
 
+from src.audio_ring_buffer import AudioRingBuffer
 from src.cache.replay_buffer import ReplayBuffer
 from src.cache.silence_jitter import SilenceJitter
 from src.cache.vad_smoother import VADSmoother
-from src.contracts import create_silence_trigger, ensure_schema_keys, SILENCE_TRIGGER_FIELDS
-from src.interfaces import AudioSource, SilencePolicy as SilencePolicyInterface, ReplayStore
+from src.contracts import SILENCE_TRIGGER_FIELDS, create_silence_trigger, ensure_schema_keys
+from src.interfaces import AudioSource, ReplayStore, SilencePolicy as SilencePolicyInterface
 from src.logging.structured_logger import log_event
 from src.sentinel.dead_mic import DeadMicDetector
 from src.telemetry.device_monitor import enumerate_microphones
@@ -25,8 +25,8 @@ BUFFER_DURATION = 1.2
 BUFFER_FRAMES = int((SAMPLE_RATE * BUFFER_DURATION) / BLOCK_SIZE) + 1
 
 
-def build_ring_buffer() -> Deque[np.ndarray]:
-    return collections.deque(maxlen=BUFFER_FRAMES)
+def build_ring_buffer() -> AudioRingBuffer:
+    return AudioRingBuffer(max_frames=BUFFER_FRAMES)
 
 
 class SoundDeviceAudioSource(AudioSource):
@@ -62,7 +62,7 @@ class SoundDeviceAudioSource(AudioSource):
 
 
 class SilencePolicy(SilencePolicyInterface):
-    def __init__(self, ring_buffer: Deque[np.ndarray], smoother: VADSmoother, jitter: SilenceJitter):
+    def __init__(self, ring_buffer: AudioRingBuffer, smoother: VADSmoother, jitter: SilenceJitter):
         self.ring_buffer = ring_buffer
         self.smoother = smoother
         self.jitter = jitter
@@ -76,7 +76,9 @@ class SilencePolicy(SilencePolicyInterface):
         delta_ms = (frames / sample_rate) * 1000
         self.jitter.update_silence(delta_ms)
         if self.jitter.is_trigger_ready():
-            full_audio = np.concatenate(self.ring_buffer)
+            full_audio = self.ring_buffer.read_latest()
+            if full_audio is None:
+                return None
             event_id = str(uuid.uuid4())
             event = create_silence_trigger(
                 event_id=event_id,
@@ -123,16 +125,25 @@ class SentinelTelemetry:
 
 
 class AudioInputService:
-    def __init__(self, audio_source: AudioSource, replay_recorder: ReplayStore, dead_mic: DeadMicDetector, error_state: ErrorStateManager):
+    def __init__(
+        self,
+        audio_source: AudioSource,
+        replay_recorder: ReplayStore,
+        dead_mic: DeadMicDetector,
+        error_state: ErrorStateManager,
+    ):
         self.audio_source = audio_source
         self.replay_recorder = replay_recorder
         self.dead_mic = dead_mic
         self.error_state = error_state
+        self._stop_event = threading.Event()
 
     def enumerate_devices(self):
         enumerate_microphones()
 
     def run(self, callback):
         with self.audio_source.start(callback):
-            while True:
-                time.sleep(0.1)
+            self._stop_event.wait()
+
+    def stop(self) -> None:
+        self._stop_event.set()
